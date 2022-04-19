@@ -3,5 +3,5 @@
 Сам бот [тут](https://github.com/JustSkiv/read-adviser-bot/tree/lessons)
 
 
-Закончил изучение первого урока
-
+Закончил изучение первого
+ 
