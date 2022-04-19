@@ -38,8 +38,8 @@ func newBasePath(token string) string {
 //получаем сообщения
 func (c *Client) Updates(offset int, limit int) ([]Update, error) {
 	q := url.Values{}
-	q.Add(key: "offset", strconv.Itoa(offset)
-	q.Add(key: "limit", strconv.Itoa(limit)
+	q.Add(key: "offset", strconv.Itoa(offset))
+	q.Add(key: "limit", strconv.Itoa(limit))
 
 	data, err := c.doRequest(getUpdatesMethod, q)
 	if err != nil {
