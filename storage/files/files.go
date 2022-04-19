@@ -2,6 +2,7 @@ package files
 
 import (
 	"encoding/gob"
+	"errors"
 	"os"
 	"path/filepath"
 )
@@ -11,6 +12,7 @@ type Storage struct {
 }
 
 const defaultPerm = 0774 
+var ErrSavedPages = errors.New("не сохраненнх данных")
 
 func New(basePath string) Storage{
 	return Storage{basePath: basePath}
@@ -40,6 +42,73 @@ func (s Storage) Save(page *storage.Page) (err error){ //TODO не понима�
 		return err
 	}
 	return err: nil
+}
+
+func (s Storage) PickRandom(userName string) (page *storage.Page, err error){
+	defer func()  {err = e.WrapIfErr(msg: "рандом поломался чет", err)} ()
+	path := filepath.Join(s.basePath, userName) 
+	files, err := os.ReadDir(path)
+	if err ! = nil {
+		return page: nil, err
+	}
+
+	if len(files) == 0 {
+		return page: nil, ErrSavedPages
+	}
+
+	rand.Seed(seed: time.Now().UnixNano())
+	n := rand.Intn(len(files)) 
+
+	file := files[n]
+	
+	return s.decodePage(filepath.Join(path, file.Name()))
+}
+
+
+func (s Storage) Remuve(p *storage.Page) error  {
+	fileName, err := fileName(p)
+	if err ! = nil {
+		retun e.Wrap(msg: "не могу удалить файл", err)
+	}
+	path := filepath.Join(s.basePath, p.UserName, fileName)
+
+	if err := os.Remove(path); err ! = nil {
+		msg:= fmt.Sprintf(format: "не могу удалить файл %s", path)
+		retun e.Wrap(msg, err)
+	}
+	return nil
+}
+
+func (s Storage) IsExists(p *storage.Page)(bool, error){
+	fileName, err := fileName(p)
+	if err ! = nil {
+		retun fasle, e.Wrap(msg: "не могу проверить", err)
+	}
+	path := filepath.Join(s.basePath, p.UserName, fileName)
+	
+	switch _, err = os.Stat(path);{
+	case errors.Is(err, os.ErrNoExist):
+		return false, nil
+	case err != nil:
+		msg:= fmt.Sprintf(format: "не могу проверить файл %s", path)
+
+	}
+	return true, nil
+}
+
+func (s Storage) decodePage (filePath string) (*storage.Page, error) {
+	f, err := os.Open(filePath)
+	if err != nil{
+		return nil, e.Wrap(msg: "не могу декодировать", err)
+	}
+	defer func () { _=file.Close()}()
+
+	var p storage.Page
+
+	if err := gob.NewDecoder(f).Decode(&p);err!=nil{
+		return nil, e.Wrap(msg: "не могу декодировать", err)
+	}
+	return &p, nil
 }
 
 func fileName(p *storage.Page) (string, error) {
