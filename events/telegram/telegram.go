@@ -47,10 +47,10 @@ func (p *Processor) Process(event events.Event) error {
 func (p *Processor) processMessage(event events.Event) error {
 	meta, err := meta(event)
 	if err != nil {
-		return e.Wrap("не вышло в processMessage", err)
+		return e.Wrap("не разобрал мету meta events/telegram/telegram.processMessage", err)
 	}
 	if err := p.doCmd(event.Text, meta.ChatID, meta.Username); err != nil {
-		return e.Wrap("не вышло в processMessage", err)
+		return e.Wrap("не выполнил команду p.doCmd events/telegram/telegram.processMessage", err)
 	}
 
 	return nil

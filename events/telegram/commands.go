@@ -51,7 +51,7 @@ func isAddCmd(text string) bool {
 }
 
 func (p *Processor) savePage(chatID int, pageURL string, username string) (err error) {
-	defer func() { err = e.WrapIfErr("не выполнил savePage", err) }()
+	defer func() { err = e.WrapIfErr("не выполнил events/telegram/commands.savePage", err) }()
 	page := &storage.Page{
 		URL:      pageURL,
 		UserName: username,

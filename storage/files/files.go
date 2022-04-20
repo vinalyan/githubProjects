@@ -27,7 +27,7 @@ func (s Storage) Save(page *storage.Page) (err error) {
 	defer func() { err = e.WrapIfErr("не могу сохранить", err) }()
 
 	fPath := filepath.Join(s.basePath, page.UserName)
-	if err := os.Mkdir(fPath, defaultPerm); err != nil {
+	if err := os.MkdirAll(fPath, defaultPerm); err != nil {
 		return err
 	}
 	fName, err := fileName(page)
