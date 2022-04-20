@@ -1,7 +1,7 @@
 package telegram
 
 import (
-	"read-adviser-bot/clients/lib/e"
+	"read-adviser-bot/lib/e"
 	"read-adviser-bot/clients/telegram"
 	"read-adviser-bot/events"
 	"read-adviser-bot/storage"
@@ -34,7 +34,7 @@ func New(clien *telegram.Client, storage storage.Storage) *Processor {
 
 func (p *Processor) Process(event events.Event) error{
 	switch event.Type {
-	case: events.Message:
+	case events.Message:
 		return p.processMeaasge(event)
 	default:
 		return Wrap(msg: "не разобрался в сообщении", ErrUnknownEventType)

@@ -9,6 +9,10 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"path"
+	
+	"read-adviser-bot/lib/e"
+
 )
 
 type Client struct {
@@ -48,8 +52,8 @@ func (c *Client) Updates(offset int, limit int) ([]Update, error) {
 
 	//пасрим JSON
 	var res UpdatesResponse 
-	if err := json.Unmarshal(data,&res) //TODO json.Unmarshal(data,&res) как это устроено? 
-	if err != nil {
+	//TODO json.Unmarshal(data,&res) как это устроено? 
+	if err := json.Unmarshal(data,&res); err != nil { 
 		return updates: nil, err
 	}
 }
@@ -71,9 +75,8 @@ func (c *Client) SendMessage(chatId int, text string) error {
 
 func (c *Client)  doRequest(method string, querry url.Values)(data []byte, err error) {
 
-	defer func ()  {
-		err = e.WrapIfErr(msg: "не могу выполнить запрос", err) //TODO разбираемся как устроены деструкторы
-	}
+	//TODO разбираемся как устроены деструкторы
+	defer func() {err = e.WrapIfErr(msg: "не могу выполнить запрос", err) }
 
 	u := url.URL{
 		Scheme: "https",
