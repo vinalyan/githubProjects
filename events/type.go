@@ -4,11 +4,11 @@ type Fetcher interface {
 	Fetch(limit int) ([]Event, error)
 }
 
-type Processo interface {
+type Processor interface {
 	Process(e Event) error
 }
 
-type Type int
+type Type int //TODO что это вообще такое?
 
 const (
 	Unknow Type = iota
@@ -18,4 +18,5 @@ const (
 type Event struct {
 	Type Type
 	Text string
+	Meta interface{}
 }

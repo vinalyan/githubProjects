@@ -3,6 +3,8 @@ package storage
 import (
 	"crypto/sha1"
 	"io"
+	"context"
+
 )
 
 type Storage interface {
@@ -11,6 +13,8 @@ type Storage interface {
 	Remove(p *Page) error
 	IsExist(p *Page) (bool, error)
 }
+
+var ErrNoSavedPages = errors.New("не сохраненнх данных")
 
 type Page struct {
 	URL	string

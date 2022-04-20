@@ -1,10 +1,17 @@
 package files
 
 import (
+	"context"
 	"encoding/gob"
 	"errors"
+	"fmt"
+	"math/rand"
 	"os"
 	"path/filepath"
+	"time"
+
+	"read-adviser-bot/lib/e"
+	"read-adviser-bot/storage"
 )
 
 type Storage struct {
@@ -12,7 +19,6 @@ type Storage struct {
 }
 
 const defaultPerm = 0774 
-var ErrSavedPages = errors.New("не сохраненнх данных")
 
 func New(basePath string) Storage{
 	return Storage{basePath: basePath}
@@ -53,8 +59,8 @@ func (s Storage) PickRandom(userName string) (page *storage.Page, err error){
 	}
 
 	if len(files) == 0 {
-		return page: nil, ErrSavedPages
-	}
+		return page: nil, storage.ErrNoSavedPages
+		}
 
 	rand.Seed(seed: time.Now().UnixNano())
 	n := rand.Intn(len(files)) 
@@ -65,7 +71,7 @@ func (s Storage) PickRandom(userName string) (page *storage.Page, err error){
 }
 
 
-func (s Storage) Remuve(p *storage.Page) error  {
+func (s Storage) Remove(p *storage.Page) error  {
 	fileName, err := fileName(p)
 	if err ! = nil {
 		retun e.Wrap(msg: "не могу удалить файл", err)
@@ -81,7 +87,7 @@ func (s Storage) Remuve(p *storage.Page) error  {
 
 func (s Storage) IsExists(p *storage.Page)(bool, error){
 	fileName, err := fileName(p)
-	if err ! = nil {
+	if err != nil {
 		retun fasle, e.Wrap(msg: "не могу проверить", err)
 	}
 	path := filepath.Join(s.basePath, p.UserName, fileName)

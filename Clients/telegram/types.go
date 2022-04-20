@@ -8,6 +8,21 @@ type UpdatesResponse struct {
 }
 
 type Update struct {
-	ID      int    `json:"update_id"`
-	Messege string `json:"messege"`
+	ID      int              `json:"update_id"`
+	Message *IncomingMessage `json:"message"`
+}
+
+//TODO все это взято из описания API телеги
+type IncomingMessage struct {
+	Text string `json: "text"`
+	From From   `json: "from"`
+	Chat Chat   `json: "chat"`
+}
+
+type From struct {
+	Username string `json: "username"`
+}
+
+type Chat struct {
+	ID int `json: "id"`
 }
