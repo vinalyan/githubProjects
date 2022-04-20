@@ -2,9 +2,10 @@ package storage
 
 import (
 	"crypto/sha1"
+	"errors"
+	"fmt"
 	"io"
-	"context"
-
+	"read-adviser-bot/lib/e"
 )
 
 type Storage interface {
@@ -17,7 +18,7 @@ type Storage interface {
 var ErrNoSavedPages = errors.New("не сохраненнх данных")
 
 type Page struct {
-	URL	string
+	URL      string
 	UserName string
 }
 
@@ -25,11 +26,11 @@ func (p Page) Hash() (string, error) {
 	h := sha1.New()
 
 	if _, err := io.WriteString(h, p.URL); err != nil {
-		return "", e.Wrap(msg: "не могу посчитать хеш", err)
+		return "", e.Wrap("не могу посчитать хеш", err)
 	}
 
 	if _, err := io.WriteString(h, p.UserName); err != nil {
-		return "", e.Wrap(msg: "не могу посчитать хеш", err)
+		return "", e.Wrap("не могу посчитать хеш", err)
 	}
 
 	return fmt.Sprintf("%x", h.Sum(nil)), nil

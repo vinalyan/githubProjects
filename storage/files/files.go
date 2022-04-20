@@ -25,7 +25,7 @@ func New(basePath string) Storage{
 }
 
 func (s Storage) Save(page *storage.Page) (err error){ //TODO не понимаю как тут определяется функция
-	defer func()  {err = e.WrapIfErr(msg: "не могу сохранить", err)} ()
+	defer func()  {err = e.WrapIfErr("не могу сохранить", err)} ()
 	fPath := filepath.Join(s.basePath, page.UserName) 
 	if err:= os.Mkdir(filePath, defaultPerm);err != nil{
 		return err
@@ -47,19 +47,19 @@ func (s Storage) Save(page *storage.Page) (err error){ //TODO не понима�
 	if err := gob.NewEncoder(file).Encode(page); err != nil{
 		return err
 	}
-	return err: nil
+	return nil
 }
 
 func (s Storage) PickRandom(userName string) (page *storage.Page, err error){
-	defer func()  {err = e.WrapIfErr(msg: "рандом поломался чет", err)} ()
+	defer func()  {err = e.WrapIfErr("рандом поломался чет", err)} ()
 	path := filepath.Join(s.basePath, userName) 
 	files, err := os.ReadDir(path)
-	if err ! = nil {
-		return page: nil, err
+	if err! = nil {
+		return nil, err
 	}
 
 	if len(files) == 0 {
-		return page: nil, storage.ErrNoSavedPages
+		return nil, storage.ErrNoSavedPages
 		}
 
 	rand.Seed(seed: time.Now().UnixNano())
