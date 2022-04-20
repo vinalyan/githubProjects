@@ -4,6 +4,7 @@ import (
 	"flag"
 	"log"
 	tgClient "read-adviser-bot/clients/telegram"
+	event_consumer "read-adviser-bot/consumer/event-consumer"
 	"read-adviser-bot/events/telegram"
 	"read-adviser-bot/storage/files"
 )

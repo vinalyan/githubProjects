@@ -23,7 +23,7 @@ const (
 )
 
 func New(host string, token string) *Client {
-	return Client{
+	return &Client{
 		host:     host,
 		basePath: newBasePath(token),
 		client:   http.Client{},
@@ -47,10 +47,13 @@ func (c *Client) Updates(offset int, limit int) ([]Update, error) {
 
 	//пасрим JSON
 	var res UpdatesResponse
+
 	//TODO json.Unmarshal(data,&res) как это устроено?
 	if err := json.Unmarshal(data, &res); err != nil {
 		return nil, err
 	}
+
+	return res.Result, nil
 }
 
 //отправляем сообщения
@@ -68,7 +71,7 @@ func (c *Client) SendMessage(chatId int, text string) error {
 
 // отправка запроса
 
-func (c *Client) doRequest(method string, querry url.Values) (data []byte, err error) {
+func (c *Client) doRequest(method string, query url.Values) (data []byte, err error) {
 
 	//TODO разбираемся как устроены деструкторы
 	defer func() { err = e.WrapIfErr("не могу выполнить запрос", err) }()
@@ -84,7 +87,7 @@ func (c *Client) doRequest(method string, querry url.Values) (data []byte, err e
 	}
 	//TODO почитать про errors.Is() и errors.As()
 
-	req.URL.RawQuerry = query.Encode()
+	req.URL.RawQuery = query.Encode()
 
 	resp, err := c.client.Do(req)
 	if err != nil {
