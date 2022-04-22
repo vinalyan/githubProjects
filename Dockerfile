@@ -1,9 +1,10 @@
 FROM golang
 
-WORKDIR /bin/bot
+WORKDIR /home/bot
 
 COPY . .
 
 EXPOSE 8001
 
-#RUN go build -o ..
+RUN go build -o /bin
+
