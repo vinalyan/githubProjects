@@ -19,12 +19,12 @@ func main() {
 
 	eventsProcessor := telegram.New(tgClient.New(tgBotHost, mustToken()), files.New(storagePath))
 
-	log.Printf("Cсервис запущен")
+	log.Printf("Cервис запущен")
 
 	consumer := event_consumer.New(eventsProcessor, eventsProcessor, batchSize)
 
 	if err := consumer.Start(); err != nil {
-		log.Fatal("сервис дико остановился", err)
+		log.Fatal("Cервис дико остановился", err)
 	}
 
 	// fetcher = fetcher.New()
