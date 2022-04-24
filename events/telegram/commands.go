@@ -38,7 +38,6 @@ func (p *Processor) doCmd(text string, chatID int, username string) error {
 	if isAddCmd(text) {
 		return p.savePage(chatID, text, username)
 	}
-
 	switch text {
 	case RndCmd:
 		return p.sendRandom(chatID, username)

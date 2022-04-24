@@ -30,18 +30,10 @@ type Chat struct {
 // Тут основная идея в том, что есть тип ReplyMarkup в который мы будем запиливать разные данные
 // ДЛя начала это буедт ReplyKeyboardMarkup
 
-type Type int
-
-const (
-	Unknow Type = iota
-	ReplyKeyboardMarkup
-	ReplyKeyboardRemove
-	InlineKeyboardMarkup
-	ForceReply
-)
+//TODO ReplyMarkup сделать интерфесом с возможностью получить JSON.
+// reply_markup = { "keyboard": [ [{"text": "FIRST_BUTTON"}], [{ "text": "SECOND_BUTTON"}], [{ "text": "THIRD_BUTTON"}] ] }
 
 type ReplyMarkup struct {
-	Type Type
 	//	Meta interface{}
 	// TODO добавть интерфес.
 }
