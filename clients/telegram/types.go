@@ -26,3 +26,21 @@ type From struct {
 type Chat struct {
 	ID int `json: "id"`
 }
+
+// Тут основная идея в том, что есть тип ReplyMarkup в который мы будем запиливать разные данные
+// ДЛя начала это буедт ReplyKeyboardMarkup
+
+type Type int
+
+const (
+	Unknow Type = iota
+	ReplyKeyboardMarkup
+	ReplyKeyboardRemove
+	InlineKeyboardMarkup
+	ForceReply
+)
+
+type ReplyMarkup struct {
+	Type Type
+	Meta interface{}
+}

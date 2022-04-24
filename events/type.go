@@ -8,7 +8,7 @@ type Processor interface {
 	Process(e Event) error
 }
 
-type Type int //TODO что это вообще такое?
+type Type int
 
 const (
 	Unknow Type = iota
