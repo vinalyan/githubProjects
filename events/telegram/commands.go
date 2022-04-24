@@ -4,6 +4,7 @@ import (
 	"errors"
 	"log"
 	"net/url"
+	TgTypes "read-adviser-bot/clients/telegram"
 	"read-adviser-bot/storage"
 	"strings"
 
@@ -23,6 +24,11 @@ const (
 // help: /help
 //start: /start: приветсвие плюс с правка...
 
+//TODO: тут это достаточно коряво. Надо как-то красиво все это сделать.
+// Но сейчас хочется, что бы просто запусакалось
+
+var replyMarkup TgTypes.ReplyMarkup
+
 func (p *Processor) doCmd(text string, chatID int, username string) error {
 	text = strings.TrimSpace(text)
 
@@ -41,7 +47,7 @@ func (p *Processor) doCmd(text string, chatID int, username string) error {
 	case StartCmd:
 		return p.sendHello(chatID)
 	default:
-		return p.tg.SendMessage(chatID, msgUnknownCommand)
+		return p.tg.SendMessage(chatID, msgUnknownCommand, replyMarkup)
 
 	}
 }
@@ -63,13 +69,13 @@ func (p *Processor) savePage(chatID int, pageURL string, username string) (err e
 	}
 	//если уже сохранено, то пишем сообщение
 	if isExist {
-		return p.tg.SendMessage(chatID, msgAlreadyExists)
+		return p.tg.SendMessage(chatID, msgAlreadyExists, replyMarkup)
 	}
 	//пытаемся сохранить страницу
 	if err := p.storage.Save(page); err != nil { //TODO разобраться  с обработкой ошибок и этой записью
 		return err
 	}
-	if err := p.tg.SendMessage(chatID, msgSaved); err != nil {
+	if err := p.tg.SendMessage(chatID, msgSaved, replyMarkup); err != nil {
 		return err
 	}
 	return nil
@@ -84,20 +90,20 @@ func (p *Processor) sendRandom(chatID int, username string) (err error) {
 		return err
 	}
 	if errors.Is(err, storage.ErrNoSavedPages) {
-		return p.tg.SendMessage(chatID, msgNoSavedPages)
+		return p.tg.SendMessage(chatID, msgNoSavedPages, replyMarkup)
 	}
-	if err := p.tg.SendMessage(chatID, page.URL); err != nil {
+	if err := p.tg.SendMessage(chatID, page.URL, replyMarkup); err != nil {
 		return err
 	}
 	return p.storage.Remove(page)
 }
 
 func (p *Processor) sendHelp(chatID int) error {
-	return p.tg.SendMessage(chatID, msgHelp)
+	return p.tg.SendMessage(chatID, msgHelp, replyMarkup)
 }
 
 func (p *Processor) sendHello(chatID int) error {
-	return p.tg.SendMessage(chatID, msgHello)
+	return p.tg.SendMessage(chatID, msgHello, replyMarkup)
 }
 
 //проверяем является ли ссылка ссылкой

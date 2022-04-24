@@ -42,5 +42,6 @@ const (
 
 type ReplyMarkup struct {
 	Type Type
-	Meta interface{}
+	//	Meta interface{}
+	// TODO добавть интерфес.
 }
