@@ -3,6 +3,7 @@ package telegram
 import (
 	"encoding/json"
 	"io"
+	"log"
 	"net/http"
 	"net/url"
 	"path"
@@ -62,6 +63,11 @@ func (c *Client) SendMessage(chatId int, text string, replymarkup ReplyMarkup) e
 	q.Add("chat_id", strconv.Itoa(chatId))
 	q.Add("text", text)
 
+	//TODO сюда как-то воткнуть JSON
+	// reply_markup = { "keyboard": [ [{"text": "FIRST_BUTTON"}], [{ "text": "SECOND_BUTTON"}], [{ "text": "THIRD_BUTTON"}] ] }
+
+	log.Printf("Вот такую штуку отправляю %s", q)
+
 	_, err := c.doRequest(sendMessageMethod, q)
 	if err != nil {
 		return e.Wrap("can't send message", err)
@@ -73,13 +79,12 @@ func (c *Client) SendMessage(chatId int, text string, replymarkup ReplyMarkup) e
 
 func (c *Client) doRequest(method string, query url.Values) (data []byte, err error) {
 
-	//TODO разбираемся как устроены деструкторы
-	defer func() { err = e.WrapIfErr("не могу выполнить запрос", err) }()
+	defer func() { err = e.WrapIfErr("не могу выполнить запрос doRequest", err) }()
 
 	u := url.URL{
 		Scheme: "https",
 		Host:   c.host,
-		Path:   path.Join(c.basePath, method), //удобная приблуда склеивать путь, что бы со всякими слешами проблем не было.
+		Path:   path.Join(c.basePath, method),
 	}
 	req, err := http.NewRequest(http.MethodGet, u.String(), nil)
 	if err != nil {
@@ -88,6 +93,8 @@ func (c *Client) doRequest(method string, query url.Values) (data []byte, err er
 	//TODO почитать про errors.Is() и errors.As()
 
 	req.URL.RawQuery = query.Encode()
+
+	log.Printf("doRequest req = %s", req.URL)
 
 	resp, err := c.client.Do(req)
 	if err != nil {
@@ -100,5 +107,6 @@ func (c *Client) doRequest(method string, query url.Values) (data []byte, err er
 	if err != nil {
 		return nil, err
 	}
+
 	return body, nil
 }
