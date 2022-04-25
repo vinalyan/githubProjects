@@ -4,7 +4,6 @@ import (
 	"errors"
 	"log"
 	"net/url"
-	TgTypes "read-adviser-bot/clients/telegram"
 	"read-adviser-bot/storage"
 	"strings"
 
@@ -24,10 +23,12 @@ const (
 // help: /help
 //start: /start: приветсвие плюс с правка...
 
-//TODO: тут это достаточно коряво. Надо как-то красиво все это сделать.
-// Но сейчас хочется, что бы просто запусакалось
+//TODO: Клавиатуры вывести отдельно
 
-var replyMarkup TgTypes.ReplyMarkup
+var (
+	replyMarkupKeyboard = `{ "keyboard": [ [{"text": "/rnd"}], [{ "text": "/start"},{ "text": "/help"}] ], "one_time_keyboard": true}`
+	NoReplyMarkup       = ""
+)
 
 func (p *Processor) doCmd(text string, chatID int, username string) error {
 	text = strings.TrimSpace(text)
@@ -46,7 +47,7 @@ func (p *Processor) doCmd(text string, chatID int, username string) error {
 	case StartCmd:
 		return p.sendHello(chatID)
 	default:
-		return p.tg.SendMessage(chatID, msgUnknownCommand, replyMarkup)
+		return p.tg.SendMessage(chatID, msgUnknownCommand, NoReplyMarkup)
 
 	}
 }
@@ -68,13 +69,13 @@ func (p *Processor) savePage(chatID int, pageURL string, username string) (err e
 	}
 	//если уже сохранено, то пишем сообщение
 	if isExist {
-		return p.tg.SendMessage(chatID, msgAlreadyExists, replyMarkup)
+		return p.tg.SendMessage(chatID, msgAlreadyExists, NoReplyMarkup)
 	}
 	//пытаемся сохранить страницу
 	if err := p.storage.Save(page); err != nil { //TODO разобраться  с обработкой ошибок и этой записью
 		return err
 	}
-	if err := p.tg.SendMessage(chatID, msgSaved, replyMarkup); err != nil {
+	if err := p.tg.SendMessage(chatID, msgSaved, NoReplyMarkup); err != nil {
 		return err
 	}
 	return nil
@@ -89,20 +90,20 @@ func (p *Processor) sendRandom(chatID int, username string) (err error) {
 		return err
 	}
 	if errors.Is(err, storage.ErrNoSavedPages) {
-		return p.tg.SendMessage(chatID, msgNoSavedPages, replyMarkup)
+		return p.tg.SendMessage(chatID, msgNoSavedPages, NoReplyMarkup)
 	}
-	if err := p.tg.SendMessage(chatID, page.URL, replyMarkup); err != nil {
+	if err := p.tg.SendMessage(chatID, page.URL, NoReplyMarkup); err != nil {
 		return err
 	}
 	return p.storage.Remove(page)
 }
 
 func (p *Processor) sendHelp(chatID int) error {
-	return p.tg.SendMessage(chatID, msgHelp, replyMarkup)
+	return p.tg.SendMessage(chatID, msgHelp, NoReplyMarkup)
 }
 
 func (p *Processor) sendHello(chatID int) error {
-	return p.tg.SendMessage(chatID, msgHello, replyMarkup)
+	return p.tg.SendMessage(chatID, msgHello, replyMarkupKeyboard)
 }
 
 //проверяем является ли ссылка ссылкой

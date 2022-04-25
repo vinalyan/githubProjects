@@ -61,16 +61,11 @@ func (c *Client) Updates(offset int, limit int) ([]Update, error) {
 }
 
 //отправляем сообщения
-func (c *Client) SendMessage(chatId int, text string, replymarkup ReplyMarkup) error {
+func (c *Client) SendMessage(chatId int, text string, replymarkup string) error {
 	q := url.Values{}
 	q.Add("chat_id", strconv.Itoa(chatId))
 	q.Add("text", text)
-
-	//TODO убрать от сюда эту дичь
-	//q.Add("reply_markup", `{ "keyboard": [ [{"text": "/rnd"}], [{ "text": "/start"},{ "text": "/help"}] ] }`)
-
-	q.Add("reply_markup", `{"inline_keyboard": [[{"text": "рандом","callback_data": "/rnd"}, {"text": "помощь","callback_data": "/help"}]]}`)
-
+	q.Add("reply_markup", replymarkup)
 	_, err := c.doRequest(sendMessageMethod, q)
 	if err != nil {
 		return e.Wrap("can't send message", err)

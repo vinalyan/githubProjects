@@ -102,6 +102,7 @@ func event(upd telegram.Update) events.Event {
 	return res
 }
 
+//TODO тут надо ввести обработку типов сообщений
 func fetchType(upd telegram.Update) events.Type {
 	if upd.Message == nil {
 		return events.Unknow
