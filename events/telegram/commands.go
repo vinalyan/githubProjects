@@ -16,16 +16,9 @@ const (
 	StartCmd = "/start"
 )
 
-//по тексту сообщения будем определять какая это команда
-//сохранить сслку
-// add page: http://...
-
-// help: /help
-//start: /start: приветсвие плюс с правка...
-
 //TODO: Клавиатуры вывести отдельно
 
-var (
+const (
 	replyMarkupKeyboard = `{ "keyboard": [ [{"text": "/rnd"}], [{ "text": "/start"},{ "text": "/help"}] ], "one_time_keyboard": true}`
 	NoReplyMarkup       = ""
 )

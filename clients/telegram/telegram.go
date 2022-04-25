@@ -52,7 +52,7 @@ func (c *Client) Updates(offset int, limit int) ([]Update, error) {
 	if err := json.Unmarshal(data, &res); err != nil {
 		return nil, err
 	}
-
+	//TODO составить список различных типов данных
 	return res.Result, nil
 }
 
