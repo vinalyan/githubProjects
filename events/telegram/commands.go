@@ -107,7 +107,6 @@ func (p *Processor) sendHello(chatID int) error {
 }
 
 //проверяем является ли ссылка ссылкой
-// TODO обязательно написать в хелп про то, что ссылка должны начинваться с /https
 func isURL(text string) bool {
 	u, err := url.Parse(text)
 	return err == nil && u.Host != "" // TODO потыкать в парсилку урлов

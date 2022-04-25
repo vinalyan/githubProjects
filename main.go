@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	tgBotHost   = "api.telegram.org" //TODO вынести хост во флаг. Флаг это походу ключ
+	tgBotHost   = "api.telegram.org"
 	storagePath = "storage"
 	batchSize   = 100
 )

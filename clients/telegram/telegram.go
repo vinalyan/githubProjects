@@ -3,7 +3,6 @@ package telegram
 import (
 	"encoding/json"
 	"io"
-	"log"
 	"net/http"
 	"net/url"
 	"path"
@@ -53,9 +52,6 @@ func (c *Client) Updates(offset int, limit int) ([]Update, error) {
 	if err := json.Unmarshal(data, &res); err != nil {
 		return nil, err
 	}
-	log.Printf("Updates 1 data:  %s", data)
-	log.Printf("Updates 2 es.Ok:  %s", res.Ok)
-	log.Printf("Updates 3 res.Result:  %s", res.Result)
 
 	return res.Result, nil
 }
