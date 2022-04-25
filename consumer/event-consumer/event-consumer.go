@@ -28,7 +28,7 @@ func (c Consumer) Start() error {
 	for {
 		gotEvent, err := c.fetcher.Fetch(c.batchSize)
 		if err != nil {
-			log.Printf("[ERR] consmer: %s", err.Error())
+			log.Printf("[ERR] Consumer Start error: %s", err.Error())
 			continue
 		}
 
@@ -54,10 +54,12 @@ TODO посмотреть функцию waitGroup
 */
 func (c *Consumer) hadleEvents(events []events.Event) error {
 	for _, event := range events {
-		log.Printf("получил новыое событие %s", event.Text)
+
+		log.Printf("получил новыое событие %s", event)
+		log.Printf("получил новыое событие текст %s", event.Text)
 
 		if err := c.processor.Process(event); err != nil {
-			log.Printf("упал тут hadleEvents: %s", err.Error())
+			log.Printf("hadleEvents упал тут : %s", err.Error())
 
 			continue
 		}

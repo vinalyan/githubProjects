@@ -38,7 +38,7 @@ func (p *Processor) Process(event events.Event) error {
 	case events.Message:
 		return p.processMessage(event)
 	default:
-		return e.Wrap("не разобрался в сообщении", ErrUnknownEventType)
+		return e.Wrap("Process не разобрался в сообщении", ErrUnknownEventType)
 
 	}
 
@@ -67,7 +67,7 @@ func meta(event events.Event) (Meta, error) {
 func (p *Processor) Fetch(limit int) ([]events.Event, error) {
 	updates, err := p.tg.Updates(p.offset, limit)
 	if err != nil {
-		return nil, e.Wrap("не могу получить событие", err)
+		return nil, e.Wrap("Fetch не могу получить событие", err)
 	}
 
 	if len(updates) == 0 {

@@ -53,6 +53,9 @@ func (c *Client) Updates(offset int, limit int) ([]Update, error) {
 	if err := json.Unmarshal(data, &res); err != nil {
 		return nil, err
 	}
+	log.Printf("Updates 1 data:  %s", data)
+	log.Printf("Updates 2 es.Ok:  %s", res.Ok)
+	log.Printf("Updates 3 res.Result:  %s", res.Result)
 
 	return res.Result, nil
 }
@@ -63,10 +66,10 @@ func (c *Client) SendMessage(chatId int, text string, replymarkup ReplyMarkup) e
 	q.Add("chat_id", strconv.Itoa(chatId))
 	q.Add("text", text)
 
-	//TODO сюда как-то воткнуть JSON
-	// reply_markup = { "keyboard": [ [{"text": "FIRST_BUTTON"}], [{ "text": "SECOND_BUTTON"}], [{ "text": "THIRD_BUTTON"}] ] }
+	//TODO убрать от сюда эту дичь
+	//q.Add("reply_markup", `{ "keyboard": [ [{"text": "/rnd"}], [{ "text": "/start"},{ "text": "/help"}] ] }`)
 
-	log.Printf("Вот такую штуку отправляю %s", q)
+	q.Add("reply_markup", `{"inline_keyboard": [[{"text": "рандом","callback_data": "/rnd"}, {"text": "помощь","callback_data": "/help"}]]}`)
 
 	_, err := c.doRequest(sendMessageMethod, q)
 	if err != nil {
@@ -79,7 +82,7 @@ func (c *Client) SendMessage(chatId int, text string, replymarkup ReplyMarkup) e
 
 func (c *Client) doRequest(method string, query url.Values) (data []byte, err error) {
 
-	defer func() { err = e.WrapIfErr("не могу выполнить запрос doRequest", err) }()
+	defer func() { err = e.WrapIfErr("doRequest не могу выполнить запрос ", err) }()
 
 	u := url.URL{
 		Scheme: "https",
@@ -94,7 +97,7 @@ func (c *Client) doRequest(method string, query url.Values) (data []byte, err er
 
 	req.URL.RawQuery = query.Encode()
 
-	log.Printf("doRequest req = %s", req.URL)
+	//log.Printf("doRequest req = %s", req.URL)
 
 	resp, err := c.client.Do(req)
 	if err != nil {
