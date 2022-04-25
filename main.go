@@ -24,7 +24,7 @@ func main() {
 	consumer := event_consumer.New(eventsProcessor, eventsProcessor, batchSize)
 
 	if err := consumer.Start(); err != nil {
-		log.Fatal("Cервис дико остановился", err)
+		log.Fatal("Cервис остановился", err)
 	}
 
 	// fetcher = fetcher.New()

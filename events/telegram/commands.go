@@ -26,7 +26,7 @@ const (
 func (p *Processor) doCmd(text string, chatID int, username string) error {
 	text = strings.TrimSpace(text)
 
-	log.Printf("получена новая команда %s от %s", text, username)
+	log.Printf("Получена новая команда %s от %s", text, username)
 
 	//проверяем, что это комнада добавления
 	if isAddCmd(text) {
@@ -77,7 +77,9 @@ func (p *Processor) savePage(chatID int, pageURL string, username string) (err e
 //получить рандомную ссылку
 // rnd page: /rnd
 func (p *Processor) sendRandom(chatID int, username string) (err error) {
-	defer func() { err = e.WrapIfErr("не вышло sendRandom", err) }()
+	defer func() {
+		err = e.WrapIfErr("sendRandom не вышло получить случайную ссылку", err)
+	}()
 	page, err := p.storage.PickRandom(username)
 	if err != nil && !errors.Is(err, storage.ErrNoSavedPages) {
 		return err

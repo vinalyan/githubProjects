@@ -55,9 +55,7 @@ TODO посмотреть функцию waitGroup
 func (c *Consumer) hadleEvents(events []events.Event) error {
 	for _, event := range events {
 
-		log.Printf("получил новыое событие %s", event)
-		log.Printf("получил новыое событие текст %s", event.Text)
-
+		log.Printf("Получил новое событие %s", event)
 		if err := c.processor.Process(event); err != nil {
 			log.Printf("hadleEvents упал тут : %s", err.Error())
 

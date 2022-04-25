@@ -59,7 +59,7 @@ func (p *Processor) processMessage(event events.Event) error {
 func meta(event events.Event) (Meta, error) {
 	res, ok := event.Meta.(Meta) //TODO разобраться с проверкой типов данных
 	if !ok {
-		return Meta{}, e.Wrap("ошибка с определением меты", ErrUnknownMetaType)
+		return Meta{}, e.Wrap("meta ошибка с определением меты", ErrUnknownMetaType)
 	}
 	return res, nil
 }
