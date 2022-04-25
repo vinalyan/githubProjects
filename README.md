@@ -1,18 +1,6 @@
 Тут пытаюсь сделать ТГ бота по [курсу](https://www.youtube.com/watch?v=73OsSlsuhFY&list=PLFAQFisfyqlWDwouVTUztKX2wUjYQ4T3l) 
 
-Сам бот [тут](https://github.com/JustSkiv/read-adviser-bot/tree/lessons)
-
-
-Пока во получается довольно печально.
-1. собираем докер с прогой. 
-2.  внутри контейнера собраем бот и потом его запускаем
-
-это не очень себе механизм. 
-надо научиться делать отделную сборочную среду где бот собирается и вторую где бот уже будет работать. 
-
 ## Ветка Keyboards
-Тут буду пытаться добавить кнопки. 
-Нужны для дргого бота. Но пытаться будут тут. 
 
 [Общее описание про клавиши](https://core.telegram.org/bots#keyboards)
 
@@ -23,27 +11,24 @@
 может содержать несколько варианторв 
 * [ReplyKeyboardMarkup](https://core.telegram.org/bots/api#replykeyboardmarkup) - клава с кнопками. Содержит массив массивов кнопок [KeyboardButton](https://core.telegram.org/bots/api#keyboardbutton) 
 
-* [ReplyKeyboardRemove](https://core.telegram.org/bots/api#replykeyboardremove) - удаляет текущую клавиатуру и ставит вместо нее дефолтную. ***Пока не очень понимаю назначение***
+* [ReplyKeyboardRemove](https://core.telegram.org/bots/api#replykeyboardremove) - удаляет текущую клавиатуру и ставит вместо нее дефолтную. 
 
 * [ForceReply](https://core.telegram.org/bots/api#forcereply) - судя по всему нужная штука когда надо пройти по цепочке вопросов ответов. Только пока не очень понял, где там сами кнопки. 
 
-* [InlineKeyboardMarkup](https://core.telegram.org/bots/api#inlinekeyboardmarkup) - кнопки прям под сообщением. Содержит массив массивово кнопок [InlineKeyboardButton](https://core.telegram.org/bots/api#inlinekeyboardbutton)
+* [InlineKeyboardMarkup](https://core.telegram.org/bots/api#inlinekeyboardmarkup) - кнопки прям под сообщением. Содержит массив массивово кнопок [InlineKeyboardButton](https://core.telegram.org/bots/api#inlinekeyboardbutton). Выдают колбек, который надо еще дополнительно обрабатывать. 
+
+Что получилось по кнопкам
+1. С событием `/start` вылезает клавиатура. 
+2. В обычных сообщениях не должна. 
+3. Сама клавиатура реализована в `events/telegram/commands.go` в виде ужасного JSON. Это надо будет дико переделать
 
 
-### План.
-1. Создаем [ReplyKeyboardMarkup](https://core.telegram.org/bots/api#replykeyboardmarkup) с парой кнопок.
-2. Втыкаем эту штуку в сообщение. 
-
-вот собсна и план. 
-
-Описание типов будет тут `clients/telegram/types.go`
-Тут надо немного переделать `clients/telegram/telegram.go` стурктуру `SendMessage` что бы можно было в нее заливать клавиатуру. 
-
-1. Создаем интерфес `reply_markup`. По идее это какая-то офигенская структура или интрефейс, которая может быть использована для всеми, описанными выше варианатами ответов.
-2. ~~В функцию `SendMessage` добавляем поле `reply_markup`. ~~
-3. ~Проверяем текущий функционал.~ 
-
-В структуру `reply_markup` надо зауснуть примерно такой JSON `reply_markup = { "keyboard": [ [{"text": "FIRST_BUTTON"}], [{ "text": "SECOND_BUTTON"}], [{ "text": "THIRD_BUTTON"}] ] }`
+TODO:
+1. реализовать нормальную клавиаутуру. просто засунуть в событие JSON очень не очень идея. 
+2. переехать на БД
+3. сделать разбор разных типов сообщений
+4. добавить разлинчные команды.
+5. сделать отдельную сборочную среду
 
 
 

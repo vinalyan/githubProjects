@@ -41,7 +41,6 @@ func (p *Processor) Process(event events.Event) error {
 		return e.Wrap("Process не разобрался в сообщении", ErrUnknownEventType)
 
 	}
-
 }
 
 func (p *Processor) processMessage(event events.Event) error {
